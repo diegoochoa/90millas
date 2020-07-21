@@ -1,0 +1,35 @@
+<ion-content>
+  <div>
+    <div class="imagen">
+      <img src="../../assets/90blanco.png" alt="">
+    </div>  
+  </div>
+
+  <div class="etiquetas">
+    <ion-item style="color: white;">
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input type="text" [(ngModel)]="email"></ion-input>
+    </ion-item>
+  </div>
+
+  <div class="etiquetas">
+    <ion-item style="color: white;">
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+  </div>
+
+
+  <div>
+    <div class="botones" style="text-align: center;">
+      <ion-button (click)="onSubmitLogin()" expand="block" color="light">Ingresar</ion-button>
+    </div>
+
+    <div class="botones" style="text-align: center;">
+      <ion-button expand="block" color="light" routerLink="/registro">Regístrate</ion-button>
+    </div>
+  </div>
+   
+    
+  
+</ion-content>
