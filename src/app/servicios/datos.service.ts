@@ -32,11 +32,15 @@ export class DatosService {
   }
 
   getSesion(id){
-    return this.sesionCollection.doc<Sesion>(id).valueChanges();
+    return this.sesionCollection.doc<any>(id).valueChanges();
   }
 
   agregarSesion(sesion){
     return this.sesionCollection.add(sesion);
     
+  }
+
+  actulizarSesion(sesion: any, id: string){
+    return this.sesionCollection.doc(id).update(sesion);
   }
 }
