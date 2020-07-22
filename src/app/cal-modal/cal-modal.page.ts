@@ -8,8 +8,6 @@ import { ModalController } from '@ionic/angular';
 })
 export class CalModalPage implements OnInit {
 
-  @Input() startTime: Date;
-  @Input() endTime: Date;
   calendar = {
     mode: 'month',
     currentDate: new Date()

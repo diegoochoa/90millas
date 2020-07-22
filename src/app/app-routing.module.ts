@@ -34,6 +34,10 @@ const routes: Routes = [
   {
     path: 'cal-modal',
     loadChildren: () => import('./cal-modal/cal-modal.module').then( m => m.CalModalPageModule)
+  },
+  {
+    path: 'info-modal',
+    loadChildren: () => import('./info-modal/info-modal.module').then( m => m.InfoModalPageModule)
   }
 ];
 

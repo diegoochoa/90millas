@@ -9,6 +9,7 @@ import { Sesion } from '../interfaces/sesion';
 
 import { ModalController } from '@ionic/angular';
 import { CalModalPage } from '../cal-modal/cal-modal.page';
+import { InfoModalPage } from '../info-modal/info-modal.page';
 
 @Component({
   selector: 'app-calendario',
@@ -99,17 +100,36 @@ export class CalendarioPage implements OnInit{
 
   async onEventSelected(event){
     
+    console.log('Modal event: ',event);
     let start = formatDate(event.startTime, 'medium', this.locale);
     let end = formatDate(event.endTime, 'medium', this.locale);
    
-    const alert = await this.alertCtrl.create({
+
+    const modal = await this.modalCtrl.create({
+      component: InfoModalPage,
+      cssClass: 'info-modal',
+      backdropDismiss: false,
+      componentProps: {
+        'infoSesion': {
+          title: event.title,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          capacidad: event.capacidad,
+          restantes: event.restantes
+        }
+      }
+    });
+   
+    await modal.present();
+
+    /* const alert = await this.alertCtrl.create({
       header: event.title,
       subHeader: `Capacidad ${event.capacidad} \n
                   Restantes: ${event.restantes}`,
       message: 'Desde: ' + start + '<br><br>Hasta: ' + end + '<br><br>\n',
       buttons: ['OK']
     });
-    alert.present();
+    alert.present(); */
   }
 
 
@@ -142,12 +162,7 @@ export class CalendarioPage implements OnInit{
     const modal = await this.modalCtrl.create({
       component: CalModalPage,
       cssClass: 'cal-modal',
-      backdropDismiss: false,
-      componentProps: {
-        startTime:  new Date(this.event.startTime),
-        endTime: new Date(this.event.endTime),
-      }
-      
+      backdropDismiss: false,  
     });
    
     await modal.present();
