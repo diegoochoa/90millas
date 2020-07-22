@@ -4,64 +4,31 @@
         <ion-buttons slot="start">
             <ion-back-button defaultHref="inicio"></ion-back-button>
         </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button (click)="openCalModal()">
+                <ion-icon name="add" slot="icon-only"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-    {{viewTitle}}
-    <ion-card>
-        <ion-card-header tappable (click)="collapseCard = !collapseCard">
-            <ion-card-title>Nueva Sesión</ion-card-title>
-        </ion-card-header>
-        <ion-card-content *ngIf="!collapseCard">
 
-            <ion-item>
-                <ion-input type="text" placeholder="Title" [(ngModel)]="event.title"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-input type="number" placeholder="Capacidad" [(ngModel)]="event.capacidad"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>Start</ion-label>
-                <ion-datetime displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM D:HH:mm" [(ngModel)]="event.startTime" [min]="minDate"></ion-datetime>
-            </ion-item>
-            <ion-item>
-                <ion-label>End</ion-label>
-                <ion-datetime displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM D:HH:mm" [(ngModel)]="event.endTime" [min]="minDate"></ion-datetime>
-            </ion-item>
-
-            <ion-button fill="outline" expand="block" (click)="addEvent()" [disabled]="event.title == ''">Add Event</ion-button>
-
-        </ion-card-content>
-    </ion-card>
-
+    <ion-segment [(ngModel)]="calendar.mode">
+        <ion-segment-button value="month">
+            <ion-label>Month</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="week">
+            <ion-label>Week</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="day">
+            <ion-label>Day</ion-label>
+        </ion-segment-button>
+    </ion-segment>
 
     <ion-row>
-        <!-- Change the displayed calendar mode -->
-        <ion-col size="4">
-            <ion-button expand="block" [color]="calendar.mode == 'month' ? 'primary' : 'secondary'" (click)="changeMode('month')">Mes</ion-button>
-        </ion-col>
-        <ion-col size="4">
-            <ion-button expand="block" [color]="calendar.mode == 'week' ? 'primary' : 'secondary'" (click)="changeMode('week')">Semana</ion-button>
-        </ion-col>
-        <ion-col size="4">
-            <ion-button expand="block" [color]="calendar.mode == 'day' ? 'primary' : 'secondary'" (click)="changeMode('day')">Dia</ion-button>
-        </ion-col>
-
-        <!-- Move back one screen of the slides -->
-        <ion-col size="10" text-left>
-            <ion-button fill="clear" (click)="back()">
-                <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
-            </ion-button>
-        </ion-col>
-
-        <!-- Move forward one screen of the slides -->
-        <ion-col size="2" text-right>
-            <ion-button fill="clear" (click)="next()">
-                <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
-            </ion-button>
-        </ion-col>
+        <h2>{{viewTitle}}</h2>
     </ion-row>
 
 

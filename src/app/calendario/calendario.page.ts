@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { Sesion } from '../interfaces/sesion';
 
 import { ModalController } from '@ionic/angular';
+import { CalModalPage } from '../cal-modal/cal-modal.page';
 
 @Component({
   selector: 'app-calendario',
@@ -17,7 +18,7 @@ import { ModalController } from '@ionic/angular';
 export class CalendarioPage implements OnInit{
 
   constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string,
-  private dataService: DatosService, private modalController: ModalController) { }
+  private dataService: DatosService, private modalCtrl: ModalController) { }
 
   ngOnInit(){
     this.resetEvent();
@@ -34,6 +35,7 @@ export class CalendarioPage implements OnInit{
         }
         this.eventSource.push(eventCopy);
       }); 
+      console.log(res);
       this.myCal.loadEvents();
       this.resetEvent();
     })
@@ -104,7 +106,7 @@ export class CalendarioPage implements OnInit{
       header: event.title,
       subHeader: `Capacidad ${event.capacidad} \n
                   Restantes: ${event.restantes}`,
-      message: 'Desde: ' + start + '<br><br>Hasta: ' + end,
+      message: 'Desde: ' + start + '<br><br>Hasta: ' + end + '<br><br>\n',
       buttons: ['OK']
     });
     alert.present();
@@ -130,5 +132,42 @@ export class CalendarioPage implements OnInit{
       startTime: new Date().toISOString(),
       endTime: new Date().toISOString()
     }
+  }
+
+
+
+
+  async openCalModal() {
+    
+    const modal = await this.modalCtrl.create({
+      component: CalModalPage,
+      cssClass: 'cal-modal',
+      backdropDismiss: false,
+      componentProps: {
+        startTime:  new Date(this.event.startTime),
+        endTime: new Date(this.event.endTime),
+      }
+      
+    });
+   
+    await modal.present();
+   
+    modal.onDidDismiss().then((result) => {
+      if (result.data && result.data.event) {
+        let event = result.data.event;
+        let eventCopy = {
+          title: event.title,
+          startTime: new Date(event.startTime),
+          endTime: new Date(event.endTime),
+          capacidad: event.capacidad,
+          restantes: event.capacidad
+        }
+
+        this.eventSource.push(eventCopy);
+        this.dataService.agregarSesion(eventCopy);
+        this.ngOnInit();
+        this.myCal.loadEvents();
+      }
+    });
   }
 }

@@ -136,6 +136,7 @@ export class ReservasPage implements OnInit {
           handler: () => {
             if(event.id){
               event.restantes -=1;
+              console.log(event.restantes);
               this.dataService.actulizarSesion(event,event.id).then(()=>{
                 console.log('Sesion actualizada');
               })
