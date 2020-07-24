@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
       icon: 'calendar'
     },
     {
-      title: 'Mis reservas',
+      title: 'Reservas',
       url: 'reservas',
       icon: 'document'
     },

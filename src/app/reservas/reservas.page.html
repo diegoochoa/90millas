@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Mis reservas</ion-title>
+        <ion-title>Reservaciones</ion-title>
         <ion-buttons slot="start">
             <ion-back-button defaultHref="inicio"></ion-back-button>
         </ion-buttons>
@@ -11,15 +11,17 @@
 
     <ion-row>
         <!-- Change the displayed calendar mode -->
-        <ion-col size="4">
-            <ion-button expand="block" [color]="calendar.mode == 'month' ? 'primary' : 'secondary'" (click)="changeMode('month')">Mes</ion-button>
-        </ion-col>
-        <ion-col size="4">
-            <ion-button expand="block" [color]="calendar.mode == 'week' ? 'primary' : 'secondary'" (click)="changeMode('week')">Semana</ion-button>
-        </ion-col>
-        <ion-col size="4">
-            <ion-button expand="block" [color]="calendar.mode == 'day' ? 'primary' : 'secondary'" (click)="changeMode('day')">Dia</ion-button>
-        </ion-col>
+        <ion-segment [(ngModel)]="calendar.mode">
+            <ion-segment-button value="month">
+                <ion-label>Month</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="week">
+                <ion-label>Week</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="day">
+                <ion-label>Day</ion-label>
+            </ion-segment-button>
+        </ion-segment>
 
         <!-- Move back one screen of the slides -->
         <ion-col size="10" text-left>

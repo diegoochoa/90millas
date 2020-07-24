@@ -10,13 +10,27 @@ import { map } from 'rxjs/operators';
 export class DatosService {
 
   private sesionCollection: AngularFirestoreCollection<any>;
-
   private sesiones: Observable<any[]>;
+
+  private reservasCollection: AngularFirestoreCollection<any>;
+  private reservas: Observable<any[]>;
   constructor(private afs: AngularFirestore) {
 
     this.sesionCollection = afs.collection<Sesion>('sesiones');
 
     this.sesiones = this.sesionCollection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data}
+        });
+      })
+    );
+
+    this.reservasCollection = afs.collection<Sesion>('reservas');
+
+    this.reservas = this.sesionCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
           const data = a.payload.doc.data();
@@ -37,9 +51,11 @@ export class DatosService {
 
   agregarSesion(sesion){
     return this.sesionCollection.add(sesion);
-    
   }
 
+  agregarReserva(reserva){
+    return this.reservasCollection.add(reserva);
+  }
   actulizarSesion(sesion: any, id: string){
     return this.sesionCollection.doc(id).update(sesion);
   }

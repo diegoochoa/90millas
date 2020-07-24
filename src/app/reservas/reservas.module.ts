@@ -10,6 +10,7 @@ import { ReservasPage } from './reservas.page';
 
 
 import { NgCalendarModule } from 'ionic2-calendar';
+import { ReservaModalPageModule } from '../reserva-modal/reserva-modal.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { NgCalendarModule } from 'ionic2-calendar';
     FormsModule,
     IonicModule,
     ReservasPageRoutingModule,
-    NgCalendarModule
+    NgCalendarModule,
+    ReservaModalPageModule
   ],
   declarations: [ReservasPage]
 })

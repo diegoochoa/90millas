@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, Inject, LOCALE_ID } from '@angular/core';
 import { CalendarComponent } from 'ionic2-calendar';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { DatosService } from '../servicios/datos.service';
 import { RouterLink, Router } from '@angular/router';
+import { ReservaModalPage } from '../reserva-modal/reserva-modal.page';
 
 @Component({
   selector: 'app-reservas',
@@ -12,6 +13,8 @@ import { RouterLink, Router } from '@angular/router';
 })
 export class ReservasPage implements OnInit {
 
+  date1: Date;
+  date2: Date;
   viewTitle = '';
   @ViewChild(CalendarComponent) myCal: CalendarComponent;
 
@@ -51,7 +54,7 @@ export class ReservasPage implements OnInit {
     endTime: ''
   };
   constructor(private alertCtrl: AlertController,  @Inject(LOCALE_ID) private locale: string,
-  private dataService: DatosService, public router: Router) { }
+  private dataService: DatosService, public router: Router, private modalCtrl: ModalController) { }
 
   ngOnInit(){
     this.resetEvent();
@@ -71,7 +74,7 @@ export class ReservasPage implements OnInit {
       this.myCal.loadEvents();
       this.resetEvent();
     })
-    console.log('eventSoucer: ',this.eventSource);
+    //console.log('eventSoucer: ',this.eventSource);
   
   }
 
@@ -125,7 +128,8 @@ export class ReservasPage implements OnInit {
     console.log(event.id);
     let start = formatDate(event.startTime, 'medium', this.locale);
     let end = formatDate(event.endTime, 'medium', this.locale);
-    
+    this.date1 = event.startTime;
+    this.date2 = event.endTime;
     const alert = await this.alertCtrl.create({
       header: event.title,
       subHeader: `Lugares restantes: ${event.restantes}`,
@@ -134,11 +138,12 @@ export class ReservasPage implements OnInit {
         {
           text: 'Reservar',
           handler: () => {
-            if(event.id){
+            if(event.id && event.restantes > 0){
               event.restantes -=1;
               console.log(event.restantes);
+              this.openReservaModal();
               this.dataService.actulizarSesion(event,event.id).then(()=>{
-                console.log('Sesion actualizada');
+                console.log('Reserva agregada y sesion actualizada');
               })
             }
           }
@@ -166,6 +171,35 @@ export class ReservasPage implements OnInit {
     this.event.startTime = selected.toISOString();
     selected.setHours(selected.getHours() + 1);
     this.event.endTime = (selected.toISOString());
+  }
+
+
+  async openReservaModal() {
+    
+    const modal = await this.modalCtrl.create({
+      component: ReservaModalPage,
+      cssClass: 'cal-modal',
+      backdropDismiss: false,  
+    });
+   
+    await modal.present();
+   
+    modal.onDidDismiss().then((result) => {
+      if (result.data && result.data.event) {
+        let reserva = result.data.event;
+        let reservaCopy = {
+          nombre: reserva.nombre,
+          startTime: new Date(this.date1),
+          endTime: new Date(this.date2),
+          email: reserva.correo,
+          celular: reserva.telefono,
+          estado: 'reservado',
+          sesiones: 1
+        }
+        this.dataService.agregarReserva(reservaCopy);
+        this.ngOnInit();
+      }
+    });
   }
 
 }

@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'info-modal',
     loadChildren: () => import('./info-modal/info-modal.module').then( m => m.InfoModalPageModule)
+  },
+  {
+    path: 'reserva-modal',
+    loadChildren: () => import('./reserva-modal/reserva-modal.module').then( m => m.ReservaModalPageModule)
   }
 ];
 
