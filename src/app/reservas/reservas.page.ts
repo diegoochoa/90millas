@@ -139,12 +139,7 @@ export class ReservasPage implements OnInit {
           text: 'Reservar',
           handler: () => {
             if(event.id && event.restantes > 0){
-              event.restantes -=1;
-              console.log(event.restantes);
-              this.openReservaModal();
-              this.dataService.actulizarSesion(event,event.id).then(()=>{
-                console.log('Reserva agregada y sesion actualizada');
-              })
+              this.openReservaModal(event);
             }
           }
         },
@@ -174,7 +169,8 @@ export class ReservasPage implements OnInit {
   }
 
 
-  async openReservaModal() {
+  //Recibe la sesion que se va modificar, aparte de crear la reserva
+  async openReservaModal(event) {
     
     const modal = await this.modalCtrl.create({
       component: ReservaModalPage,
@@ -186,6 +182,8 @@ export class ReservasPage implements OnInit {
    
     modal.onDidDismiss().then((result) => {
       if (result.data && result.data.event) {
+        event.restantes -=1;
+        this.dataService.actulizarSesion(event,event.id);
         let reserva = result.data.event;
         let reservaCopy = {
           nombre: reserva.nombre,
