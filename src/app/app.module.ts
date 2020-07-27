@@ -15,6 +15,9 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 import { AngularFireAuthModule } from "@angular/fire/auth";
 
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
+
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -26,9 +29,11 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    HttpClientModule
   ],
   providers: [
+    EmailComposer,
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }

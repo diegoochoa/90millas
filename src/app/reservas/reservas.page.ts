@@ -5,6 +5,10 @@ import { formatDate } from '@angular/common';
 import { DatosService } from '../servicios/datos.service';
 import { RouterLink, Router } from '@angular/router';
 import { ReservaModalPage } from '../reserva-modal/reserva-modal.page';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-reservas',
@@ -54,7 +58,8 @@ export class ReservasPage implements OnInit {
     endTime: ''
   };
   constructor(private alertCtrl: AlertController,  @Inject(LOCALE_ID) private locale: string,
-  private dataService: DatosService, public router: Router, private modalCtrl: ModalController) { }
+  private dataService: DatosService, public router: Router, private modalCtrl: ModalController,
+  private emailComposer: EmailComposer, private http: HttpClient) { }
 
   ngOnInit(){
     this.resetEvent();
@@ -88,7 +93,7 @@ export class ReservasPage implements OnInit {
     }
   }
 
-  async borrarSitio(id){
+ /*  async borrarSitio(id){
     const alert = await this.alertCtrl.create({
       header: 'Confirmar borrado',
       message: '¿Estás seguro de que deseas eliminar esta reserva?',
@@ -117,7 +122,7 @@ export class ReservasPage implements OnInit {
 
     await alert.present();
 
- }
+ } */
 
    changeMode(mode){
     this.calendar.mode=mode;
@@ -141,6 +146,9 @@ export class ReservasPage implements OnInit {
             if(event.id && event.restantes > 0){
               this.openReservaModal(event);
             }
+            else{
+              this.presentAlert();
+            }
           }
         },
         {
@@ -153,6 +161,19 @@ export class ReservasPage implements OnInit {
     });
     alert.present();
   }
+
+
+  async presentAlert() {
+    const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'Error',
+      message: 'Lo sentimos, los lugares para este horario se han agotado.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
   today(){
     this.calendar.currenDate = new Date();
   }
@@ -195,9 +216,16 @@ export class ReservasPage implements OnInit {
           sesiones: 1
         }
         this.dataService.agregarReserva(reservaCopy);
-        this.ngOnInit();
+        this.sendEmail(reserva.correo);
+        console.log(reserva.correo);
+        //this.router.navigateByUrl(`https://us-central1-millas-5614c.cloudfunctions.net/emailSender?dest=${reserva.correo}`);
       }
     });
   }
+
+  sendEmail(email: string){
+    console.log('correo enviado');
+    this.http.get(`https://us-central1-millas-5614c.cloudfunctions.net/emailSender?dest=${email}`)
+  } 
 
 }
