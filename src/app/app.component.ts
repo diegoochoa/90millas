@@ -13,21 +13,21 @@ import { AuthService } from './servicios/auth.service';
 export class AppComponent implements OnInit {
   public selectedIndex = 0;
   public appPages = [
-    {
+    /* {
       title: 'Calendario',
       url: '/calendario',
       icon: 'calendar'
-    },
+    }, */
     {
-      title: 'Reservas',
+      title: 'Reservar',
       url: 'reservas',
       icon: 'document'
-    },
+    }/* ,
     {
       title: 'Configuración',
       url: '/folder/Configuración',
       icon: 'settings'
-    }
+    } */
   ];
   
 

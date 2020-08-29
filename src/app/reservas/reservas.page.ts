@@ -127,14 +127,13 @@ export class ReservasPage implements OnInit {
    changeMode(mode){
     this.calendar.mode=mode;
   }
-  async onEventSelected(event){
-      
-    console.log(event);
-    console.log(event.id);
+  async mostrarSesion(event){
+
     let start = formatDate(event.startTime, 'medium', this.locale);
     let end = formatDate(event.endTime, 'medium', this.locale);
     this.date1 = event.startTime;
     this.date2 = event.endTime;
+    console.log(event.startTime, event.endTime)
     const alert = await this.alertCtrl.create({
       header: event.title,
       subHeader: `Lugares restantes: ${event.restantes}`,
@@ -144,7 +143,9 @@ export class ReservasPage implements OnInit {
           text: 'Reservar',
           handler: () => {
             if(event.id && event.restantes > 0){
+              
               this.openReservaModal(event);
+              
             }
             else{
               this.presentAlert();
@@ -192,12 +193,18 @@ export class ReservasPage implements OnInit {
 
   //Recibe la sesion que se va modificar, aparte de crear la reserva
   async openReservaModal(event) {
-    
+    console.log('this', event)
     const modal = await this.modalCtrl.create({
       component: ReservaModalPage,
       cssClass: 'cal-modal',
       backdropDismiss: false,  
+      componentProps: {
+        reserva: event,
+        startTime: this.date1,
+        endTime: this.date2
+      }
     });
+
    
     await modal.present();
    
@@ -206,6 +213,7 @@ export class ReservasPage implements OnInit {
         event.restantes -=1;
         this.dataService.actulizarSesion(event,event.id);
         let reserva = result.data.event;
+
         let reservaCopy = {
           nombre: reserva.nombre,
           startTime: new Date(this.date1),
@@ -213,19 +221,29 @@ export class ReservasPage implements OnInit {
           email: reserva.correo,
           celular: reserva.telefono,
           estado: 'reservado',
-          sesiones: 1
+          sesiones: 1,
+          sesion: event.id
         }
-        this.dataService.agregarReserva(reservaCopy);
-        this.sendEmail(reserva.correo);
+        try {
+          this.dataService.agregarReserva(reservaCopy);
+          this.eventSource = [];
+        } catch (error) {
+          console.log(error);
+        }
+        
         console.log(reserva.correo);
         //this.router.navigateByUrl(`https://us-central1-millas-5614c.cloudfunctions.net/emailSender?dest=${reserva.correo}`);
       }
     });
   }
 
-  sendEmail(email: string){
-    console.log('correo enviado');
-    this.http.get(`https://us-central1-millas-5614c.cloudfunctions.net/emailSender?dest=${email}`)
-  } 
+  back(){
+    var swiper = document.querySelector('.swiper-container')['swiper'];
+    swiper.slidePrev();
+  }
 
+  next(){
+    var swiper = document.querySelector('.swiper-container')['swiper'];
+    swiper.slideNext();
+  }
 }

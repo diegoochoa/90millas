@@ -29,6 +29,7 @@
     "cors": "^2.8.5",
     "firebase": "^7.16.0",
     "firebase-admin": "^9.0.0",
+    "firebase-functions": "^3.9.1",
     "ionic2-calendar": "^0.6.5",
     "nodemailer": "^6.4.10",
     "rxjs": "~6.5.1",

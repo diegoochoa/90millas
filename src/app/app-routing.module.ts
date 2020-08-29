@@ -14,18 +14,18 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule),
-    canActivate: [NologinGuard]
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    //canActivate: [NologinGuard]
   },
   {
     path: 'inicio',
-    loadChildren: () => import('./inicio/inicio.module').then( m => m.InicioPageModule),
-    canActivate:[AuthGuard]
+    loadChildren: () => import('./inicio/inicio.module').then( m => m.InicioPageModule)
+    //canActivate:[AuthGuard]
   },
   {
     path: 'registro',
-    loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule),
-    canActivate: [NologinGuard]
+    loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
+    //canActivate: [NologinGuard]
   },
   {
     path: 'reservas',
